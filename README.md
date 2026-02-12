@@ -1,123 +1,174 @@
-﻿**OLA-Performance-Analytics-Using-SQL-and-Power-BI**
+# OLA Performance Analytics Using SQL and Power BI
 
-**Project Overview**
+---
 
-This project focuses on analyzing OLA ride data to uncover operational inefficiencies, improve performance, and enhance customer satisfaction. By leveraging SQL for data exploration and Power BI for visualization, the analysis provides actionable insights to support data-driven business decisions.
+## 📌 Project Overview
 
-**Objectives**
+This project analyzes OLA ride data to uncover operational inefficiencies, improve performance, and enhance customer satisfaction.  
 
-- Analyze booking trends, cancellation reasons, customer ratings, and revenue metrics.
-- Identify patterns affecting operational performance and customer satisfaction.
-- Provide visual insights through interactive Power BI dashboards.
+Using **SQL for data exploration** and **Power BI for visualization**, the project delivers actionable insights to support data-driven business decisions.
+
+---
+
+## 🎯 Objectives
+
+- Analyze booking trends, cancellation patterns, customer ratings, and revenue metrics.
+- Identify operational inefficiencies affecting performance.
+- Provide interactive dashboards using Power BI.
 - Recommend strategies to reduce cancellations and improve service efficiency.
 
-**Dataset**
+---
+
+## 📂 Dataset
 
 The dataset includes OLA ride information such as booking status, trip details, customer ratings, and revenue data.
 
 - SQL Dataset : [Link](https://1drv.ms/x/c/408cf3a741dc6b18/ES0YeDisuBdJoORvH-eiN9gBZltNI7AlGfoLw2ASv-cn3w?e=gOVW6L)
 - POWER BI Dataset : [Link](https://1drv.ms/x/c/408cf3a741dc6b18/ETTHONqVnXpIoLHCTvQ-CwMBRXGqkaHAo5sFtFxObV1CRg?e=WSPGbf)
 
-**Business Problems and Solutions**
+---
 
-1. Retrieve all successful bookings:
+## 🛠 Tools & Technologies Used
 
-select \*
+- SQL (MySQL)
+- Power BI
+- Excel / CSV Dataset
 
-from bookings
+---
 
-where `Booking Status` = 'Successful';
+## 📊 Business Problems & SQL Solutions
 
-2. Find the average ride distance for each vehicle type:
+### 1️⃣ Retrieve all successful bookings
 
-select `Vehicle Type`, avg(`Ride Distance`) 
+```sql
+SELECT *
+FROM bookings
+WHERE `Booking Status` = 'Successful';
+```
 
-as avg\_distance
+---
 
-from bookings
+### 2️⃣ Find the average ride distance for each vehicle type
 
-group by `Vehicle Type`;
+```sql
+SELECT `Vehicle Type`,
+       AVG(`Ride Distance`) AS avg_distance
+FROM bookings
+GROUP BY `Vehicle Type`;
+```
 
-3. Get the total number of cancelled rides by customers:
+---
 
-select \* from bookings
+### 3️⃣ Get the total number of cancelled rides by customers
 
-where `Cancelled Rides by Customer` = '1';
+```sql
+SELECT *
+FROM bookings
+WHERE `Cancelled Rides by Customer` = '1';
+```
 
-4. List the top 5 customers who booked the highest number of rides:
+---
 
-select `Customer ID`, count(`Booking ID`)
+### 4️⃣ List the top 5 customers who booked the highest number of rides
 
-as total\_rides
+```sql
+SELECT `Customer ID`,
+       COUNT(`Booking ID`) AS total_rides
+FROM bookings
+GROUP BY `Customer ID`
+ORDER BY total_rides DESC
+LIMIT 5;
+```
 
-from bookings
+---
 
-group by `Customer ID` 
+### 5️⃣ Get rides cancelled by drivers due to personal & car-related issues
 
-order by total\_rides desc limit 5;
+```sql
+SELECT COUNT(*) AS total_driver_cancellations
+FROM bookings
+WHERE `Reason for cancelling by Driver` = 'Personal & Car related issues';
+```
 
-5. Get the number of rides cancelled by drivers due to personal and car-related issues:
+---
 
-select count(\*) from bookings 
+### 6️⃣ Find maximum and minimum driver ratings for Prime Sedan
 
-where `Reason for cancelling by Driver` = 'Personal & Car related issues';
+```sql
+SELECT MAX(`Driver Ratings`) AS max_rating,
+       MIN(`Driver Ratings`) AS min_rating
+FROM bookings
+WHERE `Vehicle Type` = 'Prime Sedan';
+```
 
-6. Find the maximum and minimum driver ratings for Prime Sedan bookings:
+---
 
-select max(`Driver Ratings`) as max\_ratings, min(`Driver Ratings`) as min\_ratings
+### 7️⃣ Retrieve all rides where payment was made using UPI
 
-from bookings 
+```sql
+SELECT *
+FROM bookings
+WHERE `Payment Method` = 'UPI';
+```
 
-where `Vehicle Type` = 'Prime Sedan'; 
+---
 
-7. Retrieve all rides where payment was made using UPI:
+### 8️⃣ Find average customer rating per vehicle type
 
-select \* from bookings
+```sql
+SELECT `Vehicle Type`,
+       AVG(`Customer Rating`) AS avg_customer_rating
+FROM bookings
+GROUP BY `Vehicle Type`;
+```
 
-where`Payment Method` = 'UPI';
+---
 
-8. Find the average customer rating per vehicle type:
+### 9️⃣ Calculate total booking value of successfully completed rides
 
-select avg(`Customer Rating`) as avg\_CR
+```sql
+SELECT SUM(`Booking Value`) AS total_successful_booking_value
+FROM bookings
+WHERE `Booking Status` = 'Successful';
+```
 
-from bookings
+---
 
-group by `Vehicle Type`;
+### 🔟 List incomplete rides with reasons
 
-9. Calculate the total booking value of rides completed successfully:
+```sql
+SELECT `Booking ID`,
+       `Incomplete Rides Reason`
+FROM bookings
+WHERE `Booking Status` = 'Incomplete';
+```
 
-select sum(`Booking Value`) as total\_successful\_bookings
+---
 
-from bookings
+## 📈 Key Insights & Findings
 
-where `Booking Status` = 'Successful';
+- Majority of rides are completed successfully.
+- Driver cancellations significantly impact operational efficiency.
+- Revenue peaks during weekends and festive periods.
+- Peak demand hours: **8–10 AM** and **5–8 PM**.
+- Better driver availability correlates with higher customer ratings.
 
-10. List all incomplete rides along with the reason:
+---
 
-select `Booking ID`, `Incomplete Rides Reason`
+## 📌 Business Recommendations
 
-from bookings
+- Reduce driver-side cancellations through performance monitoring.
+- Implement surge pricing during peak hours.
+- Introduce driver incentive programs.
+- Improve dispatch optimization to reduce wait times.
 
-where `Booking Status` = 'Incomplete';
+---
 
-**Findings**
+## 🚀 Future Enhancements
 
-- Booking Trends: The majority of rides are completed, but a significant portion is canceled due to driver unavailability and high wait times.
-- Revenue Growth: Revenue peaks during weekends and festive seasons, highlighting opportunities for targeted promotions.
-- Customer Satisfaction: Cities with better driver availability and lower wait times show higher average ratings.
-- Peak Hours: Demand is highest during morning (8–10 AM) and evening (5–8 PM) commute hours.
+- Integrate real-time ride data.
+- Perform predictive analysis on cancellations.
+- Competitor benchmarking for market positioning.
+- Sentiment analysis on customer feedback.
 
-**Conclusions**
-
-The analysis reveals that operational efficiency can be improved by:
-
-- Reducing Cancellations: Addressing driver unavailability and reducing wait times.
-- Dynamic Pricing: Implementing surge pricing during peak hours to balance supply and demand.
-- nDriver Incentives: Rewarding top-performing drivers to boost service quality.
-
-**Future Work**
-
-- Integrate real-time data to optimize ride dispatching.
-- Analyze customer feedback for service improvement.
-- Compare OLA’s performance with competitors to identify market gaps.
-
+---
