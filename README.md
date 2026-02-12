@@ -4,9 +4,7 @@
 
 ## 📌 Project Overview
 
-This project analyzes OLA ride data to uncover operational inefficiencies, improve performance, and enhance customer satisfaction.  
-
-Using **SQL for data exploration** and **Power BI for visualization**, the project delivers actionable insights to support data-driven business decisions.
+This project analyzes OLA ride data to uncover operational inefficiencies, improve performance, and enhance customer satisfaction. By leveraging SQL for data exploration and Power BI for visualization, the analysis provides actionable insights to support data-driven business decisions.
 
 ---
 
@@ -172,3 +170,4 @@ WHERE `Booking Status` = 'Incomplete';
 - Sentiment analysis on customer feedback.
 
 ---
+
